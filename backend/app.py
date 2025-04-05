@@ -8,6 +8,8 @@ import io
 import uuid
 
 app = Flask(__name__, static_folder='static')
+app.secret_key = os.environ.get("SECRET_KEY", "dev-fallback-key")  # Always set this!
+port = int(os.environ.get("PORT", 10000))  # Render uses 10000 by default
 
 # Configuration
 app.config.update({
