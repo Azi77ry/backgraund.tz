@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aziry Background Remover AI</title>
+    <meta name="description" content="Free online AI to remove backgrounds from images instantly">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="frontend/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Aziry Background Remover AI</h1>
+            <p class="description">Upload an image to automatically remove the background in seconds - no registration required</p>
+        </header>
+
+        <div class="upload-area" id="upload-area" role="button" aria-label="Upload area">
+            <svg class="upload-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+            </svg>
+            <h2>Drag & Drop your image here</h2>
+            <p>or click to browse files</p>
+            <button class="btn" id="upload-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                </svg>
+                Select Image
+            </button>
+            <input type="file" id="file-input" accept="image/png, image/jpeg, image/webp">
+            <p class="supported-formats">Supported formats: PNG, JPG, JPEG, WEBP (Max 16MB)</p>
+        </div>
+
+        <div class="progress-container" id="progress-container">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Processing your image...</p>
+        </div>
+
+        <div class="error" id="error">
+            <div class="error-icon">⚠️</div>
+            <p id="error-message"></p>
+        </div>
+
+        <div class="results" id="results">
+            <div class="image-container">
+                <div class="image-box">
+                    <h3>Original Image</h3>
+                    <img id="original-image" src="" alt="Original Image">
+                    <div class="file-info" id="original-info"></div>
+                </div>
+                <div class="image-box">
+                    <h3>Background Removed</h3>
+                    <img id="result-image" src="" alt="Result Image">
+                    <div class="file-info" id="result-info"></div>
+                </div>
+            </div>
+            <div class="actions">
+                <a href="#" class="btn btn-success" id="download-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                        <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+                    </svg>
+                    Download Result
+                </a>
+                <button class="btn" id="new-image-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                        <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                    </svg>
+                    Process New Image
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="features">
+        <div class="feature">
+            <i class="fas fa-bolt feature-icon"></i>
+            <h3 class="feature-title">Instant Processing</h3>
+            <p class="feature-desc">Get results in seconds with our powerful AI technology</p>
+        </div>
+        <div class="feature">
+            <i class="fas fa-cut feature-icon"></i>
+            <h3 class="feature-title">Precision Edits</h3>
+            <p class="feature-desc">Perfect edge detection for hair, fur, and complex shapes</p>
+        </div>
+        <div class="feature">
+            <i class="fas fa-lock feature-icon"></i>
+            <h3 class="feature-title">Secure Processing</h3>
+            <p class="feature-desc">Your images are never stored or shared with third parties</p>
+        </div>
+    </div>
+</div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Connect With Us</h4>
+                <div class="social-icons">
+                    <a href="https://wa.me/255692350076" class="social-icon"><i class="fab fa-whatsapp"></i></a>
+                    <a href="https://www.instagram.com/aziry55?igsh=MWl4Z3VhOWNtOWxuNg==" class="social-icon"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h4>Contact</h4>
+                <p><i class="fas fa-envelope"></i> Aziziiddi555@gmail.com</p>
+                <p><i class="fas fa-phone"></i> +255692350076</p>
+            </div>
+            <div class="footer-section">
+                <h4>Powered By</h4>
+                <div class="powered-by">
+                    <i class="fas fa-brain"></i>
+                    <span>Aziry-Technology</span>
+                </div>
+            </div>
+        </div>
+                <div class="copyright">
+                    &copy; <span id="current-year"></span> Background Remover Tool. All rights reserved.
+                </div>
+            </div>
+        </footer>
+    <script src="frontend/script.js"></script>    
+</body>
+</html>
