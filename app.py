@@ -179,9 +179,12 @@ def internal_error(error):
     return jsonify({'error': 'Internal server error'}), 500
 
 # ========== Main Execution ==========
+import os
+from flask import Flask
+
+app = Flask(__name__)
+
+# Add this at the bottom of your file:
 if __name__ == '__main__':
-    app.run(
-        host='0.0.0.0',
-        port=app.config['PORT'],
-        debug=os.environ.get('FLASK_ENV') == 'development'
-    )
+    port = int(os.environ.get("PORT", 10000))  # Use Render's PORT or default to 10000
+    app.run(host='0.0.0.0', port=port)  # Must bind to 0.0.0.0
