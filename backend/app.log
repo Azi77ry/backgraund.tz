@@ -1,0 +1,8 @@
+2025-04-05 21:08:14,729 INFO: Successfully processed image: 4553a16731b8450bb584eaed6199785e.jpg [in C:\Users\Azireen\Desktop\backgrnd image\backend\app.py:136]
+2025-04-05 21:09:17,033 INFO: Successfully processed image: 28af237b5cd046d886773be20c759e70.jpg [in C:\Users\Azireen\Desktop\backgrnd image\backend\app.py:136]
+2025-04-07 21:52:52,520 INFO: Cleaned up old file: static/uploads\28af237b5cd046d886773be20c759e70.jpg [in C:\Users\Azireen\Desktop\backgrnd image\backend\app.py:66]
+2025-04-07 21:52:52,524 INFO: Cleaned up old file: static/uploads\4553a16731b8450bb584eaed6199785e.jpg [in C:\Users\Azireen\Desktop\backgrnd image\backend\app.py:66]
+2025-04-07 21:52:52,538 INFO: Cleaned up old file: static/results\28af237b5cd046d886773be20c759e70_removed.png [in C:\Users\Azireen\Desktop\backgrnd image\backend\app.py:66]
+2025-04-07 21:52:52,551 INFO: Cleaned up old file: static/results\4553a16731b8450bb584eaed6199785e_removed.png [in C:\Users\Azireen\Desktop\backgrnd image\backend\app.py:66]
+2025-04-07 21:52:57,905 INFO: Successfully processed image: 095bc39437a64c569cc726a0d2f16f9f.jpg [in C:\Users\Azireen\Desktop\backgrnd image\backend\app.py:136]
+2025-04-20 12:09:36,762 INFO: Successfully processed image: d4280d8a92db4963b393370dfdec5fef.jpeg [in C:\Users\Azireen\Desktop\PROJECTS\backgrnd image\backend\app.py:136]
