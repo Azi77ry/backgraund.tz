@@ -46,6 +46,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function handleDragOver(e) {
         e.preventDefault();
+        e.stopPropagation();
         uploadArea.classList.add('highlight');
     }
 
@@ -55,6 +56,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function handleDrop(e) {
         e.preventDefault();
+        e.stopPropagation();
         uploadArea.classList.remove('highlight');
         
         const file = e.dataTransfer.files[0];
@@ -100,10 +102,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const xhr = new XMLHttpRequest();
         
+        // Progress tracking
         xhr.upload.addEventListener('progress', (e) => {
             if (e.lengthComputable) {
-                const percentComplete = (e.loaded / e.total) * 100;
+                const percentComplete = Math.round((e.loaded / e.total) * 100);
                 progressBar.style.width = percentComplete + '%';
+                progressBar.setAttribute('aria-valuenow', percentComplete);
             }
         });
 
@@ -113,21 +117,23 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 if (xhr.status === 200) {
                     try {
-                        const data = JSON.parse(xhr.responseText);
-                        handleSuccess(data);
+                        const response = JSON.parse(xhr.responseText);
+                        if (response.success) {
+                            handleSuccess(response);
+                        } else {
+                            showError(response.error || 'Failed to process image');
+                        }
                     } catch (e) {
                         showError('Invalid response from server');
-                        console.error('Parsing error:', e);
+                        console.error('Error parsing response:', e);
                     }
                 } else {
-                    let error = 'An error occurred';
                     try {
-                        const data = JSON.parse(xhr.responseText);
-                        error = data.error || error;
+                        const errorResponse = JSON.parse(xhr.responseText);
+                        showError(errorResponse.error || 'Server error occurred');
                     } catch (e) {
-                        console.error('Error parsing error response:', e);
+                        showError(`Error ${xhr.status}: ${xhr.statusText}`);
                     }
-                    showError(error);
                 }
             }
         };
@@ -137,21 +143,22 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function handleSuccess(data) {
-        if (data.success) {
-            // Display results
-            resultImage.src = data.result;
-            downloadBtn.href = data.download;
-            
-            // Display result file info if available
-            if (data.resultSize) {
-                resultInfo.textContent = formatFileInfo(data.resultSize);
-            }
-            
-            loading.style.display = 'none';
-            results.style.display = 'block';
-        } else {
-            showError(data.error || 'Failed to process image. Please try again.');
+        // Display results
+        resultImage.src = data.result;
+        downloadBtn.href = data.download;
+        
+        // Show file size information if available
+        if (data.result) {
+            fetch(data.result)
+                .then(res => res.blob())
+                .then(blob => {
+                    resultInfo.textContent = formatFileInfo(blob.size);
+                });
         }
+        
+        loading.style.display = 'none';
+        results.style.display = 'block';
+        uploadArea.style.display = 'none';
     }
 
     function showError(message) {
@@ -167,6 +174,7 @@ document.addEventListener('DOMContentLoaded', function() {
         progressBar.style.width = '0%';
         originalInfo.textContent = '';
         resultInfo.textContent = '';
+        uploadArea.style.display = 'flex'; // Show upload area again
     }
 
     function resetForm() {
@@ -182,9 +190,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function formatFileInfo(bytes) {
-        const size = bytes > 1024 * 1024 
-            ? (bytes / (1024 * 1024)).toFixed(1) + ' MB' 
-            : (bytes / 1024).toFixed(1) + ' KB';
-        return `Size: ${size}`;
+        if (bytes < 1024) return `Size: ${bytes} bytes`;
+        if (bytes < 1024 * 1024) return `Size: ${(bytes / 1024).toFixed(1)} KB`;
+        return `Size: ${(bytes / (1024 * 1024)).toFixed(1)} MB`;
     }
 });
