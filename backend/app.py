@@ -8,6 +8,8 @@ import io
 import uuid
 import logging
 from logging.handlers import RotatingFileHandler
+import sys
+sys.dont_write_bytecode = True  # Add this at the top of your script
 
 app = Flask(__name__, static_folder='static')
 
