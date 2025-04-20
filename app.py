@@ -9,6 +9,7 @@ import uuid
 import logging
 from logging.handlers import RotatingFileHandler
 
+# Initialize Flask app
 app = Flask(__name__, static_folder='static')
 
 # ========== Configuration ==========
@@ -19,7 +20,7 @@ app.config.from_mapping(
     RESULT_FOLDER='static/results',
     MAX_CONTENT_LENGTH=16 * 1024 * 1024,  # 16MB
     ALLOWED_EXTENSIONS={'png', 'jpg', 'jpeg', 'webp'},
-    MODEL_NAME='u2net',  # Options: 'u2netp', 'u2net_human_seg'
+    MODEL_NAME=os.environ.get("MODEL_NAME", "u2net"),  # Options: 'u2netp', 'u2net_human_seg'
     AUTO_CLEANUP=True,
     CLEANUP_OLDER_THAN=3600,  # 1 hour in seconds
     LOG_FILE='app.log',
@@ -71,14 +72,13 @@ def clean_old_files():
 
 # ========== Routes ==========
 @app.route('/')
-def serve_frontend():
+def serve_index():
     return send_from_directory('static', 'index.html')
 
 @app.route('/remove-bg', methods=['POST'])
 def remove_background():
     clean_old_files()
     
-    # Validate input
     if 'file' not in request.files:
         app.logger.warning("No file part in request")
         return jsonify({'error': 'No file part'}), 400
@@ -93,20 +93,17 @@ def remove_background():
         return jsonify({'error': 'Invalid file type. Allowed: PNG, JPG, JPEG, WEBP'}), 400
     
     try:
-        # Generate unique filenames
         file_ext = secure_filename(file.filename).rsplit('.', 1)[1].lower()
         unique_id = uuid.uuid4().hex
         filename = f"{unique_id}.{file_ext}"
         original_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         
-        # Save original with error handling
         try:
             file.save(original_path)
         except IOError as e:
             app.logger.error(f"Failed to save file {filename}: {str(e)}")
             return jsonify({'error': 'Failed to save file'}), 500
         
-        # Process image
         try:
             with open(original_path, 'rb') as f:
                 img_bytes = f.read()
@@ -116,14 +113,12 @@ def remove_background():
                 session=rembg.new_session(model_name=app.config['MODEL_NAME'])
             )
             
-            # Optimize output
             try:
                 output_img = Image.open(io.BytesIO(output_bytes))
                 optimized_bytes = io.BytesIO()
                 output_img.save(optimized_bytes, format='PNG', optimize=True)
                 optimized_bytes.seek(0)
                 
-                # Save result
                 result_filename = f"{unique_id}_removed.png"
                 result_path = os.path.join(app.config['RESULT_FOLDER'], result_filename)
                 with open(result_path, 'wb') as f:
@@ -179,12 +174,6 @@ def internal_error(error):
     return jsonify({'error': 'Internal server error'}), 500
 
 # ========== Main Execution ==========
-import os
-from flask import Flask
-
-app = Flask(__name__)
-
-# Add this at the bottom of your file:
 if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 10000))  # Use Render's PORT or default to 10000
-    app.run(host='0.0.0.0', port=port)  # Must bind to 0.0.0.0
+    port = int(os.environ.get('PORT', 10000))
+    app.run(host='0.0.0.0', port=port)
