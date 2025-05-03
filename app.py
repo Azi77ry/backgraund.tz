@@ -117,6 +117,7 @@ def download(filename):
 def health():
     return jsonify({'status': 'healthy'}), 200
 
+# Change this line at the bottom:
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 10000))
+    port = int(os.environ.get('PORT', 10000))  # Keep 10000 as fallback
     app.run(host='0.0.0.0', port=port)
